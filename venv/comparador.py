@@ -43,11 +43,11 @@ def compruebaArchivos():
             recorreEnvases(envases,mercadonaCsv,envasesFile)
 
         elif (mercadonaCorrecto==False and envasesCorrecto==False):
-            ui.excepciones(0)
+            excepciones.excepciones(0)
         elif envasesCorrecto==False:
-            ui.excepciones(1)
+            excepciones.excepciones(1)
         elif mercadonaCorrecto==False:
-            ui.excepciones(2)
+            excepciones.excepciones(2)
 
 
 def recorreEnvases(envases, mercadonaCsv, envasesFile):
@@ -92,6 +92,5 @@ def buscaAlbaran(mercadonaCsv,numAlbaran, columna, valor):
 
 
 def coloreaCelda(envases,celda):
-    print(envases[celda])
     cell = envases[celda]
     cell.fill = PatternFill(fill_type='solid', start_color='FF33FFCE', end_color='FF33FFCE')

@@ -1,13 +1,16 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.ttk import *
 from tkinter import filedialog as fd
 from tkinter import StringVar
 from tkinter.messagebox import *
+import threading
 
 
 import comparador
 
 root = tk.Tk()
+progressBar = Progressbar()
 
 
 
@@ -49,6 +52,20 @@ def uiMain():
             pathMercadona.set(filename)
             comparador.pathMercadonaCsv = filename
 
+    def uiProcesar():
+        uiProgressBar()
+        threading.Thread(target=comparador.compruebaArchivos).start()
+
+    def uiProgressBar():
+        progressBar = ttk.Progressbar(root, orient='horizontal', mode='indeterminate', length=300, )
+        progressBar.grid(columnspan=2, row=6, column=0, pady=10)
+        progressBar.start()
+        progressBar.update_idletasks()
+
+
+
+
+
     root.rowconfigure(0, weight=3)
     root.rowconfigure(1, weight=1)
     root.rowconfigure(2, weight=1)
@@ -73,10 +90,12 @@ def uiMain():
                                                                                  sticky=tk.W)
     campoPathEnvases = ttk.Label(root, textvariable=pathMercadona).grid(column=0, row=4)
 
-    botonProcesar = ttk.Button(root, text='Procesar', command=lambda: comparador.compruebaArchivos()).grid(column=0, row=5,
+    botonProcesar = ttk.Button(root, text='Procesar', command=lambda: uiProcesar()).grid(column=0, row=5,
                                                                                                         columnspan=2)
 
-    # progressBar = ttk.Progressbar(root,orient='horizontal',mode='indeterminate',length=300).grid(columnspan=2, row=6, column=0, pady=10)
+
+
+
 
     root.mainloop()
 
