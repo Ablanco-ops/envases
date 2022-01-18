@@ -4,12 +4,11 @@ import ui
 import openpyxl
 from openpyxl.styles import PatternFill
 import re
+import pandas as pd
 
 pathEnvases = ''
 pathMercadonaCsv = ''
-# envasesFile = None
-# envases = None
-# mercadonaCsv = None
+
 
 newpath = 'Envases.xlsx'
 
@@ -25,7 +24,7 @@ def compruebaArchivos():
         archivosLeidos=False
 
     try:
-        mercadonaCsv = openpyxl.load_workbook(filename=pathMercadonaCsv).active
+        mercadonaCsv = pd.read_csv(pathMercadonaCsv, encoding='latin-1', sep=';', header=1)
     except:
         excepciones.error(0, "Error al leer " + pathMercadonaCsv)
         archivosLeidos=False
@@ -36,7 +35,7 @@ def compruebaArchivos():
 
         if (envases['A1'].value == 'Tipo mov producto') and (envases['A2'].value == 'Grupocontableproducto'):
             envasesCorrecto = True
-        if (mercadonaCsv['A1'].value == 'Factura') and (mercadonaCsv['A2'].value == 'Centro'):
+        if (mercadonaCsv.columns.values[0] == 'Centro') and (mercadonaCsv.columns.values[1] == 'Tipo Movimiento'):
             mercadonaCorrecto = True
 
         if (mercadonaCorrecto and envasesCorrecto):
@@ -60,35 +59,35 @@ def recorreEnvases(envases, mercadonaCsv, envasesFile):
             for columna in lista:
                 currentCell = columna + str(i)
                 if (envases[currentCell].value):
-                    encontrado = buscaAlbaran(mercadonaCsv,envases[cellAlbaran].value, columna, envases[currentCell].value)
+                    encontrado= buscaAlbaran(mercadonaCsv,envases[cellAlbaran].value, columna, envases[currentCell].value)
                     if encontrado:
                         coloreaCelda(envases,columna + str(i))
 
     envasesFile.save(filename=pathEnvases)
     ui.final()
-
-    # print('Error de escritura')
     print('done')
 
 
 def buscaAlbaran(mercadonaCsv,numAlbaran, columna, valor):
     articulo = ''
     if columna == 'B':
-        articulo = '612 - Envase Plegable AECOC 60-40-12 (612)'
+        articulo = '(612)'
     elif columna == 'C':
-        articulo = '618 - Envase Plegable AECOC 60-40-18 (618)'
+        articulo = '(618)'
     elif columna == 'D':
-        articulo = '624 - Envase Plegable AECOC 60-40-24 (624)'
+        articulo = '(624)'
     elif columna == 'E':
-        articulo = '316 - Envase Plegable AECOC 30-40-16 (316)'
+        articulo = '(316)'
 
-    lastfile = len(mercadonaCsv['A'])
+    tabla=pd.DataFrame(mercadonaCsv, columns=['Centro','Tipo Movimiento','Articulo','Almacén Origen/Destino','Fecha','Albaran','Referencia Destino','Cantidad'])
+    filtro = tabla[tabla['Albaran'].str.contains(numAlbaran)]
+    if(filtro.empty==False):
+        filtro2=filtro[filtro['Articulo'].str.contains(articulo)]
+        if (filtro2.empty==False):
+            if (valor+filtro2['Cantidad'].values[0]==0):
+                return True
 
-    for i in range(3, lastfile):
-        cellAlbaran = 'F' + str(i)
-        if ((numAlbaran in mercadonaCsv[cellAlbaran].value) and ((mercadonaCsv)['C' + str(i)].value == articulo) and (
-                (mercadonaCsv)['H' + str(i)].value + valor == 0)):
-            return (True)
+
 
 
 def coloreaCelda(envases,celda):

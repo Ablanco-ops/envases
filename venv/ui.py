@@ -12,15 +12,11 @@ import comparador
 root = tk.Tk()
 progressBar = Progressbar()
 
-
-
-
-
 def final():
     fin = askyesno(title='Proceso terminado', message='Archivo modificado con éxito, ¿desea salir del programa?')
     if fin:
         root.destroy()
-        root.quit()
+        quit()
     else:
         pass
 
@@ -35,10 +31,15 @@ def uiMain():
     root.resizable(False, False)
 
     def elegir_archivo(archivo):
-        filetypes = (
-            ('Archivos Excel', '*.xlsx'),
-            # ('Todos los archivos', '*.*')
-        )
+        filetypes = None
+        if archivo=='envases':
+            filetypes = (
+                ('Archivos Excel', ('*.xlsx')),
+            )
+        else:
+            filetypes = (
+                ('Archivos Excel', ('*.csv')),
+            )
 
         filename = fd.askopenfilename(
             title='Elegir archivo',
