@@ -8,7 +8,7 @@ def excepciones(numero):
     elif (numero == 1):
         mensaje = 'Archivo de envases erroneo'
     elif (numero == 2):
-        mensaje = 'Archivo de Mercadona erroneo'
+        mensaje = 'Archivo de cliente erroneo'
 
     ui.showwarning(title='Error', message=mensaje)
 

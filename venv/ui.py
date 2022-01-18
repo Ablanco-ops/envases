@@ -5,6 +5,7 @@ from tkinter import filedialog as fd
 from tkinter import StringVar
 from tkinter.messagebox import *
 import threading
+import os
 
 
 import comparador
@@ -15,8 +16,7 @@ progressBar = Progressbar()
 def final():
     fin = askyesno(title='Proceso terminado', message='Archivo modificado con éxito, ¿desea salir del programa?')
     if fin:
-        root.destroy()
-        quit()
+        os._exit(0)
     else:
         pass
 
@@ -51,7 +51,7 @@ def uiMain():
             comparador.pathEnvases = filename
         else:
             pathMercadona.set(filename)
-            comparador.pathMercadonaCsv = filename
+            comparador.pathClienteCsv = filename
 
     def uiProcesar():
         uiProgressBar()
@@ -85,9 +85,9 @@ def uiMain():
                                command=lambda: elegir_archivo('envases')).grid(column=1, row=1,
                                                                                sticky=tk.W)
     campoPathEnvases = ttk.Label(root, textvariable=pathEnvases).grid(column=0, row=2)
-    etiquetaArchivo2 = ttk.Label(root, text='Selecciona el archivo de Mercadona').grid(column=0, row=3)
-    botonArchivo2 = ttk.Button(root, text='Selecciona el archivo de Mercadona',
-                               command=lambda: elegir_archivo('mercadona')).grid(column=1, row=3,
+    etiquetaArchivo2 = ttk.Label(root, text='Selecciona el archivo de cliente').grid(column=0, row=3)
+    botonArchivo2 = ttk.Button(root, text='Selecciona el archivo de cliente',
+                               command=lambda: elegir_archivo('cliente')).grid(column=1, row=3,
                                                                                  sticky=tk.W)
     campoPathEnvases = ttk.Label(root, textvariable=pathMercadona).grid(column=0, row=4)
 
